@@ -9,17 +9,28 @@ import {
   sendResetOtp,
   resetPassword,
 } from "../controllers/auth.controller.js";
-import userAuth from "../middleware/userAuth.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
+import { validateMiddleware } from "../middlewares/validate.middleware.js";
+import {
+  loginSchema,
+  otpSchema,
+  registerSchema,
+} from "../validations/auth.validation.js";
 
 const authRouter = express.Router();
 
-authRouter.post("/register", register);
-authRouter.post("/login", login);
+authRouter.post("/register", validateMiddleware(registerSchema), register);
+authRouter.post("/login", validateMiddleware(loginSchema), login);
 authRouter.post("/logout", logout);
-authRouter.post("/send-verify-otp", userAuth, sendVerifyOtp);
-authRouter.post("/verify-account", userAuth, verifyEmail);
-authRouter.post("/is-auth", userAuth, isAuthenticated)
-authRouter.post("/send-reset-otp", sendResetOtp)
-authRouter.post("/reset-password", resetPassword)
+authRouter.post("/send-verify-otp", authMiddleware, sendVerifyOtp);
+authRouter.post(
+  "/verify-account",
+  validateMiddleware(otpSchema),
+  authMiddleware,
+  verifyEmail,
+);
+authRouter.post("/is-auth", authMiddleware, isAuthenticated);
+authRouter.post("/send-reset-otp", validateMiddleware(otpSchema), sendResetOtp);
+authRouter.post("/reset-password", resetPassword);
 
 export default authRouter;

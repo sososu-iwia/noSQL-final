@@ -1,11 +1,16 @@
 import express from "express";
 
-import userAuth from "../middleware/userAuth.js";
-import { getUserData } from "../controllers/user.controller.js";
-import adminAuth from "../middleware/adminAuth.js";
+import authMiddleware from "../middlewares/auth.middleware.js";
+import adminMiddleware from "../middlewares/admin.middleware.js";
+import {
+  getCurrentUser,
+  updateCurrentUser,
+} from "../controllers/user.controller.js";
 
 const userRouter = express.Router();
 
-userRouter.get("/data", userAuth, getUserData);
+userRouter.get("/profile", authMiddleware, getCurrentUser);
+userRouter.get("/:id", authMiddleware, adminMiddleware);
+userRouter.put("/update", authMiddleware, updateCurrentUser);
 
 export default userRouter;

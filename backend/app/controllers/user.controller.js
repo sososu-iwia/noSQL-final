@@ -1,24 +1,45 @@
-import userModel from "../model/userModel.js";
+import userModel from "../models/user.model.js";
 
-export const getUserData = async (req, res) => {
+export const getCurrentUser = async (req, res) => {
   try {
-    const { email } = req.body || {};
+    const userId = req.user.id;
 
-    const user = await userModel.findById(email);
+    const user = await userModel
+      .findById(userId)
+      .select(
+        "-password -verifyOtp -resetOtp -verifyOtpExpireAt -resetOtpExpireAt -__v -_id",
+      );
 
     if (!user) {
-      return res.json({ success: false, message: "User not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
     }
 
-    res.json({
-      success: true,
-      userData: {
-        username: user.username,
-        isAccountVerified: user.isAccountVerified,
-      },
-    });
+    return res.json({ success: true, user });
   } catch (err) {
-    res.json({ success: false, message: err.message });
+    return res.status(500).json({ success: false, message: err.message });
   }
 };
 
+export const updateCurrentUser = async (req, res) => {
+  const currentUser = req.user;
+  const updateData = req.body;
+  try {
+    const updatedUser = await userModel.findByIdAndUpdate(
+      currentUser._id,
+      { $set: updateData },
+      { new: true },
+    );
+
+    if (result.matchedCount === 0) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    res.json({ success: true, message: "User updated successfully" });
+  } catch (err) {
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
