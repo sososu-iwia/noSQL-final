@@ -9,6 +9,7 @@ import userRouter from "./app/routes/user.routes.js";
 import flightRouter from "./app/routes/flight.routes.js";
 import bookingRouter from "./app/routes/booking.routes.js";
 import paymentRouter from "./app/routes/payment.routes.js";
+import AggregationRouter from "./app/routes/aggregation.routes.js";
 
 dotenv.config();
 
@@ -33,5 +34,6 @@ app.use("/api/user", userRouter);
 app.use("/api/flights", flightRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/payments", paymentRouter);
+app.use("/api/analytics", AggregationRouter)
 
 app.listen(PORT, () => console.log(`Server running at ${PORT}`));
