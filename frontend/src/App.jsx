@@ -10,6 +10,7 @@ import CreateBooking from './pages/CreateBooking';
 import Bookings from './pages/Bookings';
 import BookingDetails from './pages/BookingDetails';
 import Payment from './pages/Payment';
+import Analytics from './pages/Analytics';
 import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
@@ -23,6 +24,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/search" element={<FlightSearch />} />
+            <Route path="/analytics" element={<Analytics />} />
             <Route
               path="/book-flight/:flightId"
               element={

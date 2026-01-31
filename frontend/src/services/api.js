@@ -20,18 +20,30 @@ export const authAPI = {
   sendResetOtp: (email) => api.post('/auth/send-reset-otp', { email }),
   resetPassword: (data) => api.post('/auth/reset-password', data),
 };
+
 export const flightsAPI = {
   getAllRoutes: () => api.post('/flights/getAllRoutes'),
   getFlightByRoute: (from, to) => api.post('/flights/getFlightByRoute', { from, to }),
 };
+
 export const bookingsAPI = {
   createBooking: (data) => api.post('/bookings', data),
   getMyBookings: () => api.get('/bookings/me'),
   getBookingById: (id) => api.get(`/bookings/${id}`),
   cancelBooking: (id) => api.patch(`/bookings/${id}/cancel`),
 };
+
 export const paymentsAPI = {
   payBooking: (data) => api.post('/payments/pay', data),
+};
+
+export const analyticsAPI = {
+  getTopRoutes: (limit = 10) => api.get('/analytics/flights/top-routes', {
+    params: { limit }
+  }),
+  getAirlinesPricing: (minFlights = 1) => api.get('/analytics/flights/airlines/pricing', {
+    params: { minFlights }
+  }),
 };
 
 export default api;

@@ -19,7 +19,12 @@ const PORT = process.env.PORT || 4000;
 connectDB();
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({ credentials: true }));
+app.use(
+  cors({
+    origin: "http://localhost:9999", // 👈 твой фронт
+    credentials: true, // 👈 разрешаем cookies
+  }),
+);
 app.use((err, req, res, next) => {
   if (err instanceof SyntaxError && "body" in err) {
     return res.status(400).json({ success: false, message: "Invalid JSON" });
@@ -34,6 +39,6 @@ app.use("/api/user", userRouter);
 app.use("/api/flights", flightRouter);
 app.use("/api/bookings", bookingRouter);
 app.use("/api/payments", paymentRouter);
-app.use("/api/analytics", AggregationRouter)
+app.use("/api/analytics", AggregationRouter);
 
 app.listen(PORT, () => console.log(`Server running at ${PORT}`));
